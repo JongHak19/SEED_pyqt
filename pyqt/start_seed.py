@@ -61,9 +61,22 @@ class SeedDialog(QDialog):
     def run_seed(self):
         key = self.ui.txt_key.toPlainText()
         key_confirm = self.ui.txt_key2.toPlainText()
+    
         
+        if key == "":
+            QMessageBox.warning(self, "Key Empty", "키를 입력해주세요.")
+            return
+        
+        if key_confirm == "":
+            QMessageBox.warning(self, "Key Confirm Empty", "키 확인을 입력해주세요.")
+            return
+
         if key != key_confirm:
             QMessageBox.warning(self, "Key Mismatch", "입력한 키가 일치하지 않습니다.")
+            return
+
+        if self.ui.txt_before_file.toPlainText() == "":
+            QMessageBox.warning(self, "File Empty", "파일을 선택해주세요.")
             return
 
         input_file_path = self.ui.txt_before_file.toPlainText()
