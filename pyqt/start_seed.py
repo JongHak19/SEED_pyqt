@@ -1,4 +1,4 @@
-import sys, os, subprocess
+import sys, os, subprocess, psutil, time
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMessageBox
 from seedUI import Ui_Dialog
 
@@ -91,9 +91,30 @@ class SeedDialog(QDialog):
 
                 
     def run_java_program(self, key, input_file_path, output_file_path, mode, classpath, encryptmode):
+        # 측정을 시작하기 전 CPU 및 메모리 사용량을 초기화합니다.
+        process = psutil.Process(os.getpid())
+        cpu_percent_start = process.cpu_percent(interval=None)
+        mem_info_start = process.memory_info()
+
+        start_time = time.time()
         command = ["java", "-cp", classpath, encryptmode, key, input_file_path, output_file_path, mode]
         result = subprocess.run(command, capture_output=True, text=True)
+        end_time = time.time()
+
+        # 측정을 종료한 후 CPU 및 메모리 사용량을 계산합니다.
+        cpu_percent_end = process.cpu_percent(interval=None)
+        mem_info_end = process.memory_info()
+
+        execution_time = end_time - start_time
+        cpu_usage = cpu_percent_end - cpu_percent_start
+        memory_usage = mem_info_end.rss - mem_info_start.rss
+
         print(result.stdout)
+        print(f"실행 시간: {execution_time} seconds")
+        print(f"CPU 사용률: {cpu_usage} %")
+        print(f"메모리 사용량: {memory_usage} Bytes")
+
+
 
     def update_labels(self):
         if self.ui.radio_encrypt.isChecked():
