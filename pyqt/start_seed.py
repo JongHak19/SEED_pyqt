@@ -84,7 +84,7 @@ class SeedDialog(QDialog):
         mode = "0" if self.ui.radio_encrypt.isChecked() else "1"
         encrypt_mode = self.ui.combo_mode.currentText()
 
-        classpath = f"/Users/choijonghak/개인파일/동의대/정보보호/SEED/mode/{encrypt_mode}"
+        classpath = f"mode/{encrypt_mode}"
         encryptmode = f"KISA_SEED_{encrypt_mode}"
         print(key, input_file_path, output_file_path, mode, classpath, encryptmode)
         self.run_java_program(key, input_file_path, output_file_path, mode, classpath, encryptmode)
